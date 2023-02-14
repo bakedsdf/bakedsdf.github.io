@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>BakedSDF</title>
+
+    <meta name="description" content="BakedSDF: Meshing Neural SDFs for Real-Time View Synthesis">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <base href="/"> -->
+
+        <!--FACEBOOK-->
+    <meta property="og:image" content="https://bakedsdf.github.io/img/breakdown.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="682">
+    <meta property="og:image:height" content="682">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bakedsdf.github.io"/>
+    <meta property="og:title" content="BakedSDF" /
+    <meta property="og:description" content="Project page for BakedSDF: Meshing Neural SDFs for Real-Time View Synthesis." />
+
+        <!--TWITTER-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="BakedSDF" />
+    <meta name="twitter:description" content="Project page for BakedSDF: Meshing Neural SDFs for Real-Time View Synthesis." />
+    <meta name="twitter:image" content="https://bakedsdf.github.io/img/breakdown.png"/>
+
+
+<!--     <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍞</text></svg>">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="container" id="main">
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                BakedSDF: Meshing Neural SDFs for Real-Time View Synthesis</br>
+                <small>
+                    Anonymous Authors
+                </small>
+            </h2>
+        </div>
+
+
+        <div class="row">
+                <div class="col-md-8 col-md-offset-2 text-center">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>
+                            <a href="2022_BakedSDF.pdf">
+                            <image src="img/bake_paper_image.png" height="120px">
+                                <h4><strong>Paper</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                            <image src="img/youtube_icon.png" height="120px">
+                                <h4><strong>Video</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#demos">
+                            <image src="img/demos-01.png" height="120px">
+                                <h4><strong>Demos</strong></h4>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Abstract
+                </h3>
+                <!-- <image src="img/rays.jpg" class="img-responsive" alt="overview"><br> -->
+                <p class="text-justify">
+We present a method for reconstructing high-quality meshes of large unbounded real-world scenes suitable for photorealistic novel view synthesis. We first optimize a hybrid neural volume-surface scene representation designed to have well-behaved level sets that correspond to surfaces in the scene. We then bake this representation into a high-quality triangle mesh, which we equip with a simple and fast view-dependent appearance model based on spherical Gaussians. Finally, we optimize this baked representation to best reproduce the captured viewpoints, resulting in a model that can leverage accelerated polygon rasterization pipelines for real-time view synthesis on commodity hardware. Our approach outperforms previous scene representations for real-time rendering in terms of accuracy, speed, and power consumption, and produces high quality meshes that enable applications such as appearance editing and physical simulation.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Video
+                </h3>
+                <div class="text-center">
+                    <div style="position:relative;padding-top:56.25%;">
+                        <iframe src="" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" id="demos">
+                <h3>
+                    Real-Time Interactive Viewer Demos
+                </h3>
+                <h4>
+                    Real Captured Scenes
+                </h4>
+            </div>
+        </div>
+
+        <div class="row">
+                <div class="col-md-4 col-md-offset-2 text-center">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>
+                            <a href="viewer/index.html?scene=https://dl.dropboxusercontent.com/s/7srlfofbiryehn6/gardenvase.glb">
+                            <image src="img/gardenvase.png" width="160px">
+                                <h4><strong>Gardenvase</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                            <image src="img/gardenvase.png" width="160px">
+                                <h4><strong>Gardenvase</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                            <image src="img/gardenvase.png" width="160px">
+                                <h4><strong>Gardenvase</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                            <image src="img/gardenvase.png" width="160px">
+                                <h4><strong>Gardenvase</strong></h4>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    BakedSDF
+                </h3>
+                <br>
+                <image src="img/breakdown.png" style="width:100%;" class="img-responsive center-block" alt="overview">
+                <br>
+                <p class="text-justify">
+                    Our method bakes a hybrid VolSDF/mip-NeRF 360 scene representation into a triangle mesh, then optimizes a lightweight view-dependent appearance model to reproduce the training images. The final color of the rendered mesh is a sum of spherical Gaussian lobes (queried with the outgoing view direction) and a diffuse color. These parameters are stored per-vertex on the underlying mesh.
+                </p>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Related links
+                </h3>
+                <p class="text-justify">
+                  Something something? or delete. could be like mipnerf360/volsdf, something that uses spherical gaussians? idk
+                </p>
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Acknowledgements
+                </h3>
+                <p class="text-justify">
+                The website template was borrowed from <a href="http://mgharbi.com/">Michaël Gharbi</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
