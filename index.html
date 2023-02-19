@@ -173,6 +173,18 @@ We present a method for reconstructing high-quality meshes of large unbounded re
                                 <h4><strong>Kitchen Counter</strong></h4>
 							</a>
 						</li>
+						<li>
+							<style>
+							.disabled-link {
+							  pointer-events: none;
+ 							  color: grey;
+							}
+							</style>
+                            <a href="https://bakedsdf.github.io/viewer/index.html?scene=https://dl.dropboxusercontent.com/s/zw6trrwjnh56pyp/kitchencounter.glb" class="disabled-link">
+                            <image src="img/flowertreehill.png" width="160px"></image>
+                                <h4 ><strong>Treehill & Flower </strong></h4>
+							</a>
+						</li>
                     </ul>
                 </div>
         </div>
@@ -184,7 +196,7 @@ We present a method for reconstructing high-quality meshes of large unbounded re
                     BakedSDF
                 </h3>
                 <br>
-                <image src="img/breakdown.png" style="width:100%;" class="img-responsive center-block" alt="overview">
+                <image src="img/breakdown.png" style="width:100%;" class="img-responsive center-block" alt="overview"></image>
                 <br>
                 <p class="text-justify">
                     Our method bakes a hybrid VolSDF/mip-NeRF 360 scene representation into a triangle mesh, then optimizes a lightweight view-dependent appearance model to reproduce the training images. The final color of the rendered mesh is a sum of spherical Gaussian lobes (queried with the outgoing view direction) and a diffuse color. These parameters are stored per-vertex on the underlying mesh.
@@ -196,6 +208,7 @@ We present a method for reconstructing high-quality meshes of large unbounded re
 
 
 
+<!--
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <h3>
@@ -207,6 +220,7 @@ We present a method for reconstructing high-quality meshes of large unbounded re
                 </p>
             </div>
         </div>
+-->
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
