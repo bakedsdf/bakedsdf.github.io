@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -47,6 +46,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
 
     <script src="js/app.js"></script>
+	
+<!--
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+-->
+	
+	<link rel="stylesheet" href="css/dics.min.css">
+    <script src="scripts/dics.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', domReady);
+        function domReady() {
+            for (const e of document.querySelectorAll(".b-dics")) {
+                new Dics({
+                    container: e,
+                    textPosition: "top"
+                });
+            }
+        }
+    </script>
+	
 </head>
 
 <body>
@@ -188,6 +209,7 @@ We present a method for reconstructing high-quality meshes of large unbounded re
                     </ul>
                 </div>
         </div>
+	
 
 
         <div class="row">
@@ -203,7 +225,28 @@ We present a method for reconstructing high-quality meshes of large unbounded re
                 </p>
             </div>
         </div>
-
+		
+		<div class="row comp-margin">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Mesh Extraction and Rendering
+                </h3>
+                <div class="b-dics" style="width: 100%">
+                    <img src="img/gardenvase_mesh_ours.jpg" alt="Mesh" />
+                    <img src="img/gardenvase_rendering.jpg" alt="Rendering" />
+                </div>
+            </div>
+        </div>
+		<br>
+		
+		<div class="row comp-margin">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="b-dics" style="width: 100%">
+                    <img src="img/mesh.014.jpg" alt="Mesh" />
+                    <img src="img/final.014.jpg" alt="Rendering" />
+                </div>
+            </div>
+        </div>
 
 
 
