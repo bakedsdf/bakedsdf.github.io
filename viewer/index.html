@@ -96,6 +96,18 @@ body {
   transform-origin: top left;
   background: #fff;
 }
+
+#rendermode {
+  position: absolute;
+  margin: 0 0 0 -200px;
+  top: 0px;
+  left: 50%;
+  width: 400px;
+  height: 25px;
+  text-align: center;
+  background: rgba(255,255,255,0.6);
+}
+
 </style>
 </head>
 <body>
@@ -104,6 +116,9 @@ body {
   <div id="Loading">
       <h4>[Loading]</h4>
   </div>
+  <div id="rendermode">
+    Full rendering (press space to toggle)
+  </div>
   <div id="loading-container">
     <div id="topleft" class="loading-bgbox"></div>
     <div id="bottomleft" class="loading-bgbox"></div>
@@ -111,7 +126,7 @@ body {
     <div id="bottomright" class="loading-bgbox"></div>
     <div id="loading-indicator"></div>
   </div>
-  <div class=viewspace id="viewspace"></div>
+  <div class=viewspace id="viewspace">  </div>
 </div>
 
 <script src="https://unpkg.com/three@0.140.0/build/three.js"></script>
