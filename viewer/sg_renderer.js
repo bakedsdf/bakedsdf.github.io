@@ -329,16 +329,22 @@ function render() {
 
 document.addEventListener('keypress', function(e) {
     if (e.keyCode === 32 || e.key === ' ' || e.key === 'Spacebar') {
+        const renderModeDiv = document.getElementById('rendermode');
         if (gDisplayMode == DisplayModeType.DISPLAY_FULL) {
             gDisplayMode = DisplayModeType.DISPLAY_DIFFUSE;
+            renderModeDiv.textContent = "Diffuse only (press space to toggle)";
         } else if (gDisplayMode == DisplayModeType.DISPLAY_DIFFUSE) {
             gDisplayMode = DisplayModeType.DISPLAY_VIEW_DEPENDENT;
+            renderModeDiv.textContent = "View-dependent only (press space to toggle)";
         } else if (gDisplayMode == DisplayModeType.DISPLAY_VIEW_DEPENDENT) {
             gDisplayMode = DisplayModeType.DISPLAY_NORMALS;
+            renderModeDiv.textContent = "Displaying normals (press space to toggle)";
         } else if (gDisplayMode == DisplayModeType.DISPLAY_NORMALS) {
             gDisplayMode = DisplayModeType.DISPLAY_SHADED;
+            renderModeDiv.textContent = "Showing shaded mesh (press space to toggle)";
         } else /* gDisplayMode == DisplayModeType.DISPLAY_SHADED */ {
             gDisplayMode = DisplayModeType.DISPLAY_FULL;
+            renderModeDiv.textContent = "Full rendering (press space to toggle)";
         }
         e.preventDefault();
     }
