@@ -9,6 +9,10 @@
     DISPLAY_DIFFUSE: 1,
     /** Only shows the view dependent component. */
     DISPLAY_VIEW_DEPENDENT: 2 ,
+    /** Visualizes the surface normals of the mesh. */
+    DISPLAY_NORMALS: 3 ,
+    /** Visualizes the mesh using diffuse shading and a white albedo. */
+    DISPLAY_SHADED: 4 ,
 };
 
 /**  @type {!DisplayModeType}  */
@@ -90,6 +94,7 @@ function hideLoading() {
 
  varying vec3 vDiffuse;
  varying vec3 vDirection;
+ varying vec3 vPositionWorld;
 
  varying vec3 vSgMean0;
  varying vec3 vSgMean1;
@@ -103,10 +108,23 @@ function hideLoading() {
  varying vec3 vSgColor1;
  varying vec3 vSgColor2;
 
+ uniform int displayMode;
  uniform mat3 worldspace_R_opengl;
  uniform mat4 world_T_clip;
  
   void main() {
+    // See the DisplayMode enum at the top of this file.
+    // Runs the full model with view dependence.
+    const int DISPLAY_FULL = 0;
+    // Disables the view-dependence network.
+    const int DISPLAY_DIFFUSE = 1;
+    // Only shows the view dependent component.
+    const int DISPLAY_VIEW_DEPENDENT = 2;
+    // Visualizes the surface normals of the mesh.
+    const int DISPLAY_NORMALS = 3;
+    // Visualizes the mesh using diffuse shading and a white albedo.
+    const int DISPLAY_SHADED = 4;
+
     vec3 positionWorld = position;
     vec4 positionClip = projectionMatrix * modelViewMatrix * vec4(positionWorld, 1.0);
     gl_Position = positionClip;
@@ -118,18 +136,25 @@ function hideLoading() {
     vDirection = worldspace_R_opengl * normalize(farPoint.xyz / farPoint.w - origin);
 
     vDiffuse = color.rgb;
+    if (displayMode == DISPLAY_NORMALS ||
+        displayMode == DISPLAY_SHADED) {
+        vPositionWorld = worldspace_R_opengl * position;
+    }
 
-    vSgMean0 = _sg_mean_0 * (2.0 / 255.0) - 1.0;
-    vSgMean1 = _sg_mean_1 * (2.0 / 255.0) - 1.0;
-    vSgMean2 = _sg_mean_2 * (2.0 / 255.0) - 1.0;
+    if (displayMode == DISPLAY_FULL || 
+        displayMode == DISPLAY_VIEW_DEPENDENT) {
+        vSgMean0 = _sg_mean_0 * (2.0 / 255.0) - 1.0;
+        vSgMean1 = _sg_mean_1 * (2.0 / 255.0) - 1.0;
+        vSgMean2 = _sg_mean_2 * (2.0 / 255.0) - 1.0;
 
-    vSgScale0 = 100.0 * _sg_scale_0 / 255.0;
-    vSgScale1 = 100.0 * _sg_scale_1 / 255.0;
-    vSgScale2 = 100.0 * _sg_scale_2 / 255.0;
+        vSgScale0 = 100.0 * _sg_scale_0 / 255.0;
+        vSgScale1 = 100.0 * _sg_scale_1 / 255.0;
+        vSgScale2 = 100.0 * _sg_scale_2 / 255.0;
 
-    vSgColor0 = _sg_color_0 / 255.0;
-    vSgColor1 = _sg_color_1 / 255.0;
-    vSgColor2 = _sg_color_2 / 255.0;
+        vSgColor0 = _sg_color_0 / 255.0;
+        vSgColor1 = _sg_color_1 / 255.0;
+        vSgColor2 = _sg_color_2 / 255.0;
+    }
  }
 `;
 
@@ -143,6 +168,7 @@ const sgFragmentShaderSource = `
 
  varying vec3 vDiffuse;
  varying vec3 vDirection;
+ varying vec3 vPositionWorld;
 
  varying vec3 vSgMean0;
  varying vec3 vSgMean1;
@@ -156,10 +182,43 @@ const sgFragmentShaderSource = `
  varying vec3 vSgColor1;
  varying vec3 vSgColor2;
 
-
  vec3 evalSphericalGaussian(vec3 direction, vec3 mean, float scale, vec3 color) {
     return color * exp(scale * (dot(direction, mean) - 1.0));
  }
+
+vec3 compute_sh_shading(vec3 n) {
+    // SH coefficients for the "Eucalyptus Grove" scene from 
+    // "An Efficient Representation for Irradiance Environment Maps" 
+    // [Ravamoorthi & Hanrahan, 2001]
+    vec3 c[9] = vec3[](
+        vec3(0.38, 0.43, 0.45),
+        vec3(0.29, 0.36, 0.41),
+        vec3(0.04, 0.03, 0.01),
+        vec3(-0.10, -0.10, -0.09),
+        vec3(-0.06, -0.06, -0.04),
+        vec3(0.01, -0.01, -0.05),
+        vec3(-0.09, -0.13, -0.15),
+        vec3(-0.06, -0.05, -0.04),
+        vec3(0.02, -0.00, -0.05)
+    );
+
+    // From the SH shading implementation in three js:
+    // https://github.com/mrdoob/three.js/blob/master/src/math/SphericalHarmonics3.js
+    vec3 color = c[0] * 0.282095;
+
+    color += c[1] * 0.488603 * n.y;
+    color += c[2] * 0.488603 * n.z;
+    color += c[3] * 0.488603 * n.x;
+    
+    color += c[4] * 1.092548 * (n.x * n.y);
+    color += c[5] * 1.092548 * (n.y * n.z);
+    color += c[7] * 1.092548 * (n.x * n.z);
+    color += c[6] * 0.315392 * (3.0 * n.z * n.z - 1.0);
+    color += c[8] * 0.546274 * (n.x * n.x - n.y * n.y);
+
+    // Brighten everything up a bit with and-tuned constants.
+    return 1.66 * color + vec3(0.1, 0.1, 0.1);
+}
 
  void main() {
     // See the DisplayMode enum at the top of this file.
@@ -169,9 +228,14 @@ const sgFragmentShaderSource = `
     const int DISPLAY_DIFFUSE = 1;
     // Only shows the view dependent component.
     const int DISPLAY_VIEW_DEPENDENT = 2;
+    // Visualizes the surface normals of the mesh.
+    const int DISPLAY_NORMALS = 3;
+    // Visualizes the mesh using diffuse shading and a white albedo.
+    const int DISPLAY_SHADED = 4;
 
     vec3 diffuse = vDiffuse;
     vec3 directionWorld = -normalize(vDirection);
+    vec3 normal = normalize(cross(dFdx(vPositionWorld), dFdy(vPositionWorld)));
 
     vec3 viewDependence = evalSphericalGaussian(
         directionWorld, normalize(vSgMean0), vSgScale0, vSgColor0);
@@ -185,8 +249,12 @@ const sgFragmentShaderSource = `
         color = diffuse + viewDependence;
     } else if (displayMode == DISPLAY_DIFFUSE) {
         color = diffuse;
-    } else /* displayMode == DISPLAY_VIEW_DEPENDENT */ {
+    } else if (displayMode == DISPLAY_VIEW_DEPENDENT) {
         color = viewDependence;
+    } else if (displayMode == DISPLAY_NORMALS) {
+        color = 0.5 * (normal + 1.0);
+    } else /* displayMode == DISPLAY_SHADED */ {
+        color = compute_sh_shading(vec3(normal.x, normal.z, normal.y));
     }
 
     gl_FragColor = vec4(color, 1.0);
@@ -265,7 +333,11 @@ document.addEventListener('keypress', function(e) {
             gDisplayMode = DisplayModeType.DISPLAY_DIFFUSE;
         } else if (gDisplayMode == DisplayModeType.DISPLAY_DIFFUSE) {
             gDisplayMode = DisplayModeType.DISPLAY_VIEW_DEPENDENT;
-        } else /* gDisplayMode == DisplayModeType.DISPLAY_VIEW_DEPENDENT */ {
+        } else if (gDisplayMode == DisplayModeType.DISPLAY_VIEW_DEPENDENT) {
+            gDisplayMode = DisplayModeType.DISPLAY_NORMALS;
+        } else if (gDisplayMode == DisplayModeType.DISPLAY_NORMALS) {
+            gDisplayMode = DisplayModeType.DISPLAY_SHADED;
+        } else /* gDisplayMode == DisplayModeType.DISPLAY_SHADED */ {
             gDisplayMode = DisplayModeType.DISPLAY_FULL;
         }
         e.preventDefault();
